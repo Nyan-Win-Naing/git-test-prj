@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+<style>
+    /* body color : #A6E2FE, primary color: #24BDFF*/
+
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #A6E2FE;
+    }
+
+    .todo {
+        width: 350px;
+        margin: 100px auto;
+    }
+
+    .todo-header {
+        width: 350px;
+        height: 170px;
+        border: 2px solid #24BDFF;
+        border-radius: 30px;
+        padding: 20px;
+        background-color: #24BDFF;
+    }
+
+    .header-left {
+        display: inline-block;
+        width: 200px;
+        border: 0px solid black;
+    }
+
+    .header-right {
+        width: 100px;
+        height: 80px;
+        border: 0px solid black;
+        float: right;
+        padding: 0px 10px;
+    }
+
+    .header-left h4 {
+        font-size: 30px;
+        color: #ffffff;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        display: inline-block;
+        width: 200px;
+        border: 0px solid black;
+    }
+
+    .header-left input {
+        border: none;
+        border-left: 4px solid #ffffff;
+        background-color: #24BDFF;
+        height: 30px;
+        width: 200px;
+        padding: 5px;
+        color: #ffffff;
+        font-size: 17px;
+    }
+
+    .header-left input::placeholder {
+        color: #ffffff;
+    }
+
+    .text-color {
+        color: #24BDFF;
+    }
+
+    .btn {
+
+
+    }
+
+    .btn-add {
+        width: 80px;
+        height: 80px;
+        border-radius: 40px;
+        border: 1px solid #ffffff;
+        cursor: pointer;
+        transition: 0.5s;
+        background-color: #ffffff;
+    }
+
+    .btn-add:active {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .todo-list {
+        border: 1px solid #ffffff;
+        width: 350px;
+        height: 400px;
+        border-radius: 30px 0px 0px 30px;
+        margin-top: -45px;
+        background-color: #ffffff;
+        padding: 10px 20px;
+        box-shadow: 1px 1px 2px 1px #888888;
+    }
+
+    .scroll-list {
+        border: 0px solid black;
+        height: 370px;
+        overflow: auto;
+    }
+
+    /* width */
+    .scroll-list::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    /* Track */
+    .scroll-list::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    .scroll-list::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    .scroll-list::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+
+    .list {
+        list-style-type: none;
+        padding-left: 0px;
+    }
+
+    .list li {
+        background-color: rgb(186, 238, 253);
+        margin-bottom: 5px;
+        padding: 10px;
+        width: 300px;
+        font-family: "Trebuchet MS";
+        color: #24BDFF;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 0px 30px 30px 0px;
+        transition: 0.5s;
+        border-left: 5px solid #73c7ed;
+    }
+
+    .list li:hover {
+        border-left-width: 10px;
+        background-color: rgba(186, 238, 253, 0.9);
+    }
+
+    .item {
+        display: inline-block;
+        width: 200px;
+        border: 0px solid black;
+    }
+
+    .blue {
+        color: #24BDFF;
+    }
+
+    .red {
+        color: #be2727;
+    }
+
+    .del-btn {
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        background-color: rgb(186, 238, 253);
+        transition: 0.4s;
+    }
+
+    .edit-btn {
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        background-color: rgb(186, 238, 253);
+    }
+
+    .del-btn:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-btn:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
+<body>
+    <div class="todo">
+         <div class="todo-header">
+             <div class="header-left">
+                <h4>To Do List</h4>
+                <input type="text" id="input" placeholder="Say Something...">
+             </div>
+
+             <div class="header-right">
+                <button id="addBtn" class="btn btn-add" onclick="addList()">
+                    <i class="fas fa-plus fa-2x text-color"></i>
+                </button>
+             </div>
+         </div>
+
+         <div class="todo-list">
+             <div class="scroll-list">
+                <ul class="list" id="list">
+                
+                </ul> 
+             </div>
+         </div>
+    </div>
+                  
+    <script>
+        let minTextLength = 3;
+        let i = 1;
+
+        let input = document.getElementById("input");
+        let list = document.getElementById("list");
+
+
+        function textFilter(x) {
+            if (x) {
+                if (x.length >= minTextLength) {
+                    return x;
+                } else {
+                    alert("Min Text Length is 3");
+                    return false;
+                }
+            } else {
+                alert("Input Text empty");
+                return false;
+            }
+        }
+
+        function showList(text) {
+            list.innerHTML += `
+                <li class="list-item" id="list${i}">                 
+                    <div class="item" id="listText${i}">${text}</div>
+                        <button class="btn del-btn" onclick="deleteList(${i})"><i class="fas fa-trash-alt red"></i></button>
+                        <button class="btn edit-btn" onclick="editList(${i})"><i class="fas fa-pen-alt blue"></i></button>
+                </li>
+
+            `;
+            i++;
+        }
+
+        function deleteList(listId) {
+            let current = document.getElementById(`list${listId}`);
+            let currentText = document.getElementById(`listText${listId}`);
+            let deleteConfirm = confirm(`Are you sure to delete list '${currentText.innerHTML}'?`);
+            if (deleteConfirm) {
+                list.removeChild(current);
+           } else {
+               console.log("Delete Cancel.");
+           }
+        }
+
+        function addList() {
+            // get
+            let inputText = textFilter(input.value);
+
+            // set
+            if (inputText) {
+                showList(inputText);
+                input.value = "";
+            }
+        }
+
+        function editList(listId) {
+            let current = document.getElementById(`listText${listId}`);
+            let newText = prompt("Say Something", current.innerHTML);
+            
+            if (textFilter(newText)) {
+                current.innerHTML = newText;
+            }
+        }
+    </script>
+    
+</body>
+</html>
